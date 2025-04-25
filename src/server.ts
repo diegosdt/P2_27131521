@@ -12,6 +12,8 @@ app.set('view engine', 'ejs');
 // esta la de los estilos
 app.use(express.static(path.join(__dirname, 'public'))); 
 
+
+
 // servidor
 app.use('/', indexRouter);
 

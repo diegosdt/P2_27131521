@@ -1,0 +1,128 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+   
+}
+
+
+h1 {
+    text-align: center; 
+    font-size: 5.5rem;
+    margin: 80px 0; 
+}
+
+
+.barra {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color:  rgba(255, 107, 107, 0.9);
+    height: 60px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0; 
+    width: 100%;
+    z-index: 1000; 
+    transition: background-color 0.3s ease;
+    margin-top: 0;
+  }
+  
+  .barra:hover {
+    background-color: #978E87;
+  }
+
+
+body {
+    background-image: url('../images/fondo.jpg'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: flex-start; 
+    min-height: 100vh; 
+    margin: 0; 
+    background-color:  rgba(255, 107, 107, 0.9);
+}
+
+
+.contenedor {
+    background: rgba(255, 255, 255, 0.8); 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    max-width: 90%; 
+    width: 100%; 
+    margin: 20px auto; 
+}
+
+
+.galeria {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 10px; 
+    justify-items: center; 
+    padding: 0; 
+    margin: 0; 
+}
+
+
+.imagen {
+    width: 200px; 
+    height: 200px; 
+    object-fit: cover; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+
+/* descripcion y cositas del menu como descripcion precio y esas cosas */
+.item {
+    text-align: center; 
+    margin: 10px; 
+}
+
+
+
+.item h3 {
+    font-size: 1.2rem;
+    margin: 10px 0 5px; 
+}
+
+
+.item p {
+    font-size: 1rem;
+    margin: 5px 0; 
+}
+
+
+.item .hora {
+    font-weight: bold;
+    color: #333; 
+    margin-top: 5px;
+}
+
+footer {
+    background-color: #333; 
+    color: #fff; 
+    text-align: center; 
+    padding: 20px 0; 
+    width: 100%; 
+    margin-top: auto; 
+    position: relative; 
+}
+
+
+html, body {
+    height: 100%; 
+    margin: 0; 
+    display: flex;
+    flex-direction: column;
+}
+
+body > .contenedor {
+    flex: 1; 
+}
