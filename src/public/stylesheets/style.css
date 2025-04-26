@@ -16,10 +16,10 @@ body {
 }
 
 .loguito {
-  position: absolute; 
-  top: 50px; 
-  right: 10px; 
-  width: 400px; 
+  width: 100%;
+  max-width: 150px; 
+  margin: 0 auto;
+  display: block;
 }
 
 .bienvenida {
@@ -41,9 +41,9 @@ body {
 }
 
 
-.carrusel{
+.carrusel {
   overflow: hidden;
-  width: 1500px;
+  width: 100%; 
 }
 
 .wrap {
@@ -155,12 +155,14 @@ footer .footer-info p {
   .bienvenida {
       font-size: 24px; 
       text-align: center; 
+      margin-top: 100px;
   }
 
   .loguito {
       width: 150px; 
       margin: 0 auto; 
       display: block;
+      max-width: 150px;
   }
 
   .franja {
