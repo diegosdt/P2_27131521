@@ -127,3 +127,30 @@ html, body {
 body > .contenedor {
     flex: 1; 
 }
+
+
+@media (max-width: 768px) {
+    .galeria {
+        grid-template-columns: 1fr; 
+        gap: 15px; 
+        grid-template-columns: repeat(2, 1fr); 
+    }
+  
+    .imagen {
+        width: 100%; 
+        max-width: 300px; 
+        height: auto; 
+    }
+  
+    .item h3 {
+        font-size: 1rem; 
+    }
+  
+    .item p {
+        font-size: 0.9rem; 
+    }
+  
+    .item .hora {
+        font-size: 0.9rem; 
+    }
+  }
