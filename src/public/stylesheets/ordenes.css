@@ -126,17 +126,59 @@ h2{
     }
 
     footer {
-        background-color: #333; /* Color de fondo */
-        color: #fff; /* Color del texto */
-        text-align: center; /* Centrar el texto */
-        padding: 20px 0; /* Espaciado interno */
-        width: 100%; /* Asegura que cubra todo el ancho */
-        margin-top: auto; /* Empuja el footer hacia el final */
-        position: relative; /* Posición relativa por defecto */
+        background-color: #333; 
+        color: #fff; 
+        text-align: center; 
+        padding: 20px 0; 
+        width: 100%; 
+        margin-top: auto;  
+        position: relative; 
     }
     
-    /* Asegura que el contenido principal ocupe todo el espacio disponible */
+    
     
     body > .contenedor {
-        flex: 1; /* Hace que el contenido principal ocupe el espacio disponible */
+        flex: 1;
     }
+
+
+    @media (max-width: 768px) {
+   
+        .llenado {
+            width: 80%; 
+            padding: 20px; 
+            gap: 15px; 
+        }
+      
+        .llenado input {
+            height: 40px; 
+            font-size: 0.9rem; 
+        }
+      
+        
+        .logo {
+            width: 200px; 
+            left: 10px; 
+            top: 10px; 
+        }
+      
+        
+        .botoncito {
+            width: 120px; 
+            height: 45px; 
+            font-size: 14px; 
+        }
+      
+        .botones {
+            gap: 10px; 
+        }
+      
+        
+        h1 {
+            font-size: 3rem; 
+        }
+      
+        h2 {
+            font-size: 1.5rem; 
+        }
+      }

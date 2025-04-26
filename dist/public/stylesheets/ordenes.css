@@ -141,3 +141,44 @@ footer {
 body > .contenedor {
     flex: 1; 
 }
+
+@media (max-width: 768px) {
+   
+    .llenado {
+        width: 80%; 
+        padding: 20px; 
+        gap: 15px; 
+    }
+  
+    .llenado input {
+        height: 40px; 
+        font-size: 0.9rem; 
+    }
+  
+    
+    .logo {
+        width: 200px; 
+        left: 10px; 
+        top: 10px; 
+    }
+  
+    
+    .botoncito {
+        width: 120px; 
+        height: 45px; 
+        font-size: 14px; 
+    }
+  
+    .botones {
+        gap: 10px; 
+    }
+  
+    
+    h1 {
+        font-size: 3rem; 
+    }
+  
+    h2 {
+        font-size: 1.5rem; 
+    }
+  }
