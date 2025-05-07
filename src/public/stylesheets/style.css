@@ -22,6 +22,38 @@ body {
   width: 400px; 
 }
 
+a {
+  text-decoration: none;
+}
+
+#btnprin {   
+  display: block; 
+  margin: 0 auto; 
+  width: fit-content; 
+  width: 180px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  height: 55px;
+  text-align:center;
+  border: none;
+  background-size: 300% 100%;
+  border-radius: 50px;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+}
+
+#btnprin:hover {
+  scale: 0.95;
+  background-color: rebeccapurple;
+}
+
+#btnprin a:hover {
+  color: white;
+}
+
 .bienvenida {
   font-size: 60px;
   position: relative; 

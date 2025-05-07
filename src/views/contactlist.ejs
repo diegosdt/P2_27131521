@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Contactos</title>
+    <link rel="stylesheet" href="/stylesheets/contacts_list.css">
+</head>
+<body>
+    <h1>Contactos Recibidos</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Comentario</th>
+                <th>IP</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% contacts.forEach(contact => { %>
+                <tr>
+                    <td data-label="Nombre"><%= contact.name %></td>
+                    <td data-label="Email"><%= contact.email %></td>
+                    <td data-label="Comentario"><%= contact.comment %></td>
+                    <td data-label="IP"><%= contact.ip_address %></td>
+                    <td data-label="Fecha"><%= new Date(contact.created_at).toLocaleString() %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>

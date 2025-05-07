@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "build": "tsc && npm run copy-views",
-    "copy-views": "cp -r src/views dist/views",
-    "start": "node dist/server.js",
-    "dev": "ts-node src/app.ts"
+    "copy-views": "cp -r src/views dist/views && cp -r src/public dist/public",
+    "start": "node dist/app.js",
+    "dev": "nodemon --watch src --ext ts,js,ejs --exec ts-node src/app.ts"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -15,7 +15,10 @@
     "express": "~4.16.1",
     "express-generator": "^4.16.1",
     "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.8",
@@ -24,6 +27,8 @@
     "@types/http-errors": "^2.0.4",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.14.0",
+    "@types/sqlite3": "^5.1.0",
+    "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }

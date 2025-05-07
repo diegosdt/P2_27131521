@@ -88,7 +88,10 @@ h2{
     
 }
 
-
+a {
+    text-decoration: none;
+  }
+  
 .botoncito {   
     width: 150px;
     font-size: 16px;
@@ -182,3 +185,51 @@ h2{
             font-size: 1.5rem; 
         }
       }
+
+/* Estilos específicos para el formulario de contacto */
+.form-contacto {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-group {
+    width: 100%;
+}
+
+.form-input {
+    margin-left: 20px;
+    height: 50px;
+    width: 90%;
+    padding: 30px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #333;
+}
+
+.textarea {
+    height: 150px !important;
+    resize: vertical;
+}
+
+/* Efectos para los inputs */
+.form-input:focus {
+    border-color: #667eea;
+    outline: none;
+    box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+}
+
+/* Mensaje de éxito (opcional) */
+.alert-success {
+    padding: 1rem;
+    background-color: rgba(102, 158, 109, 0.8);
+    color: white;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: bold;
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Pagos</title>
+    <link href="/stylesheets/payment_list.css" rel="stylesheet">
+</head>
+<body>
+
+    <main class="container">
+        <h1 class="list-title">Pagos Recibidos</h1>
+        
+        <table class="payment-table" border="1">
+            <thead>
+                <tr>
+                    <th>Servicio</th>
+                    <th>Email</th>
+                    <th>Titular</th>
+                    <th>Monto</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% payments.forEach(payment => { %>
+                    <tr>
+                        <td><%= payment.service %></td>
+                        <td><%= payment.email %></td>
+                        <td><%= payment.card_name %></td>
+                        <td><%= payment.currency %> <%= payment.amount.toFixed(2) %></td>
+                        <td><%= new Date(payment.payment_date).toLocaleString() %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </main>
+
+</body>
+</html>

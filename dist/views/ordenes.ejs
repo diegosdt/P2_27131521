@@ -16,35 +16,54 @@
             <a href="/index" class="opcion">Inicio</a>
             <a href="/informacion" class="opcion">informacion</a>
             <a href="/menu" class="opcion">talleres</a>
-            <a href="/ordenes" class="opcion">inscripcion</a>
+            <a href="/contact" class="opcion">inscripcion</a>
             <a href="/index" class="opcion">salir</a>
         </div>
 
+    <main class="contenedor">
+        <h1>Contáctanos</h1>
+        
+        <div class="llenado">
+            <form action="/contact/add" method="POST" class="form-contacto">
+                <div class="form-group">
+                    <label for="email" class="label-comida">Correo electrónico</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        class="form-input"
+                    >
+                </div>
 
-    <h1>inscripcion del taller</h1>
+                <div class="form-group">
+                    <label for="name" class="label-comida">Nombres</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        required 
+                        class="form-input"
+                    >
+                </div>
 
-<div class="llenado">
-    <h2>nombre</h2>
-<input type="text" placeholder="ingrese su nombre" required/>
-<h2>Apellido</h2>
-<input type="text" placeholder="ingrese su descripcion" required/>
-<h2>direccion</h2>
-<input type="text" placeholder="direccion del pedido" required/>
-<label for="comida" class="label-comida">nivel del taller</label>
-<select id="opcion" name="opcion">
-    <option value="opcion1">seleccione el nivel del taller</option>
-    <option value="opcion1">basico</option>
-    <option value="opcion1">medio</option>
-    <option value="opcion1">alto</option>
-    <option value="opcion1">mega</option>
-</select>
+                <div class="form-group">
+                    <label for="comment" class="label-comida">Comentario</label>
+                    <textarea 
+                        id="comment" 
+                        name="comment" 
+                        rows="5" 
+                        required 
+                        class="form-input textarea"
+                    ></textarea>
+                </div>
 
-<input type="text" placeholder=" edad" required/>
-<div class="botones"> 
-<button class="botoncito color-3" onclick="window.open('#')">enviar</button>
-<button class="botoncito color-3" onclick="window.open('#')">borrar</button>
-</div>
-</div>
+                <div class="botones">
+                    <button type="submit" class="botoncito color-3">Enviar Mensaje</button>
+                </div>
+            </form>
+        </div>
+    </main>
 
 <img class="logo" src="logo.png".png" alt="primero" />
 <%- include('footer') %>
