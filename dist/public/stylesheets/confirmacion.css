@@ -1,4 +1,4 @@
-/* Estilos base consistentes con tu tema */
+
 body {
     background: linear-gradient(135deg, rgba(255, 107, 107, 0.9), rgba(41, 47, 54, 0.9));
     color: #fff;
@@ -65,7 +65,7 @@ body {
     }
   }
 
-  /* Responsive */
+  
   @media (max-width: 768px) {
 
     .confirmacion {

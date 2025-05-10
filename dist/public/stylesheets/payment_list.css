@@ -1,4 +1,4 @@
-/* Estilos base consistentes con tu tema */
+
 body {
     background: linear-gradient(135deg, rgba(255, 107, 107, 0.9), rgba(41, 47, 54, 0.9));
     color: #ccc;
@@ -14,7 +14,7 @@ a {
     text-decoration: none;
   }
   
-/* Contenedor principal mejorado */
+
 .list-container {
     width: 90%;
     max-width: 1200px;
@@ -27,7 +27,7 @@ a {
     overflow-x: auto;
 }
 
-/* Título más destacado */
+
 .list-title {
     color: #fff;
     text-align: center;
@@ -37,7 +37,26 @@ a {
     letter-spacing: 1px;
 }
 
-/* Tabla rediseñada */
+.barra {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #669e6d;
+    height: 60px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0; 
+    width: 100%;
+    z-index: 1000; 
+    transition: background-color 0.3s ease;
+    margin-top: 0;
+    }
+    
+    .barra:hover {
+    background-color: #978E87;
+    }
+
+
 .contacts-table {
     width: 100%;
     border-collapse: separate;
@@ -83,14 +102,13 @@ a {
     transition: all 0.2s ease;
 }
 
-/* Celdas de comentario más grandes */
+
 .contacts-table td:nth-child(3) {
     min-width: 250px;
     max-width: 350px;
     word-break: break-word;
 }
 
-/* Botón mejorado */
 .back-button {
     margin-top: 40px;
     text-align: center;
@@ -116,7 +134,28 @@ a {
     box-shadow: 0 8px 25px rgba(116, 79, 168, 1);
 }
 
-/* Responsive mejorado */
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    width: 100%; 
+    margin-top: auto; 
+}
+
+footer .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 15px; 
+ }
+
+
+
+
 @media (max-width: 992px) {
     .list-container {
         width: 95%;

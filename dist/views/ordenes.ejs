@@ -9,19 +9,12 @@
 
 <body>
 
-
+    
         
-        <div class="barra">
-
-            <a href="/index" class="opcion">Inicio</a>
-            <a href="/informacion" class="opcion">informacion</a>
-            <a href="/menu" class="opcion">talleres</a>
-            <a href="/contact" class="opcion">inscripcion</a>
-            <a href="/index" class="opcion">salir</a>
-        </div>
+    <%- include('barra') %>
 
     <main class="contenedor">
-        <h1>Contáctanos</h1>
+        <h1>Comentarios</h1>
         
         <div class="llenado">
             <form action="/contact/add" method="POST" class="form-contacto">
@@ -46,7 +39,7 @@
                         class="form-input"
                     >
                 </div>
-
+           
                 <div class="form-group">
                     <label for="comment" class="label-comida">Comentario</label>
                     <textarea 
@@ -66,6 +59,7 @@
     </main>
 
 <img class="logo" src="logo.png".png" alt="primero" />
+
 <%- include('footer') %>
 </body>
 </html>

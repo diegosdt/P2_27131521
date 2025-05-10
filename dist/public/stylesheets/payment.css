@@ -1,4 +1,4 @@
-/* Estilos base del body heredados */
+
 body {
     display: flex;
     flex-direction: column;
@@ -9,7 +9,7 @@ body {
     padding-top: 100px;
 }
 
-/* Contenedor principal - similar a .llenado */
+
 .payment-form {
     width: 500px;
     padding: 30px;
@@ -22,7 +22,7 @@ body {
     gap: 20px;
 }
 
-/* Título - estilo consistente */
+
 .list-title {
     color: #ccc;
     text-align: center;
@@ -30,13 +30,33 @@ body {
     margin-bottom: 20px;
 }
 
-/* Filas del formulario */
+.barra {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #669e6d;
+    height: 60px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0; 
+    width: 100%;
+    z-index: 1000; 
+    transition: background-color 0.3s ease;
+    margin-top: 0;
+    }
+    
+    .barra:hover {
+    background-color: #978E87;
+    }
+
+
+
 .form-row {
     width: 100%;
     margin-bottom: 15px;
 }
 
-/* Etiquetas - igual que .label-comida */
+
 .form-label {
     font-size: 1.5rem;
     font-weight: bold;
@@ -45,7 +65,7 @@ body {
     display: block;
 }
 
-/* Inputs y selects - estilo similar */
+
 .form-input, .form-select {
     height: 50px;
     width: 100%;
@@ -58,14 +78,14 @@ body {
     color: #333;
 }
 
-/* Focus - efecto consistente */
+
 .form-input:focus, .form-select:focus {
     border-color: #667eea;
     outline: none;
     box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
 }
 
-/* Grupo de tarjeta */
+
 .card-group {
     display: flex;
     gap: 15px;
@@ -75,7 +95,7 @@ body {
     flex: 1;
 }
 
-/* Botón - usando tu estilo .botoncito.color-3 */
+
 .submit-btn {
     width: 100%;
     padding: 15px;
@@ -98,7 +118,7 @@ body {
     box-shadow: 0 8px 25px rgba(116, 79, 168, 0.9);
 }
 
-/* Estilo para selects - personalización adicional */
+
 .form-select {
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23669e6d'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
@@ -107,7 +127,7 @@ body {
     background-size: 20px;
 }
 
-/* Responsive - igual que en tu contacto */
+
 @media (max-width: 768px) {
     .payment-form {
         width: 80%;
@@ -128,32 +148,53 @@ body {
     }
 }
 
+
+
 footer {
     background-color: #333;
     color: #fff;
     text-align: center;
     padding: 20px 0;
-    margin-top: 20px;
-  }
-  
-  footer .footer-container {
+    margin-top: auto; 
+    width: 100%; 
+}
+
+footer .footer-container {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  
-  footer .social-media a {
-    color: #fff;
-    margin: 0 10px;
-    text-decoration: none;
-  }
-  
-  footer .social-media a:hover {
-    text-decoration: underline;
-  }
-  
-  footer .footer-info p {
-    margin: 5px 0;
-  }
+    padding: 0 15px; 
+}
+
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 80px; 
+    }
+    
+    .payment-form {
+        width: 90%; 
+        padding: 15px;
+        margin: 10px auto;
+    }
+    
+    .list-title {
+        font-size: 1.8rem; 
+    }
+    
+    footer .footer-container {
+        padding: 0 10px;
+    }
+    
+    footer .footer-info p {
+        font-size: 0.9rem; 
+    }
+}
+
+@media (max-width: 480px) {
+    .form-label {
+        font-size: 1.2rem; 
+    }
+}

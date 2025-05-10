@@ -11,15 +11,16 @@ body {
 }
 
 
+
 h1 {
-    color: #ccc;
+    color: #ffffff;
     text-align: center; 
     font-size: 5.5rem; 
     margin-bottom: 20px; 
 }
 
 h2{
-    color: #ccc;
+    color: #ffffff;
 }
 
 
@@ -186,7 +187,7 @@ a {
         }
       }
 
-/* Estilos específicos para el formulario de contacto */
+
 .form-contacto {
     width: 100%;
     display: flex;
@@ -216,14 +217,14 @@ a {
     resize: vertical;
 }
 
-/* Efectos para los inputs */
+
 .form-input:focus {
     border-color: #667eea;
     outline: none;
     box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
 }
 
-/* Mensaje de éxito (opcional) */
+
 .alert-success {
     padding: 1rem;
     background-color: rgba(102, 158, 109, 0.8);
