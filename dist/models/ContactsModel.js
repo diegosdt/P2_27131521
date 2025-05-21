@@ -16,12 +16,13 @@ class ContactsModel {
         return __awaiter(this, void 0, void 0, function* () {
             const db = yield (0, db_1.initializeDB)();
             try {
-                const result = yield db.run(`INSERT INTO contacts (email, name, comment, ip_address) 
-                 VALUES (?, ?, ?, ?)`, [
+                const result = yield db.run(`INSERT INTO contacts (email, name, comment, ip_address, country) 
+                 VALUES (?, ?, ?, ?, ?)`, [
                     contactData.email,
                     contactData.name,
                     contactData.comment,
-                    contactData.ipAddress
+                    contactData.ipAddress,
+                    contactData.country
                 ]);
                 return result.lastID;
             }

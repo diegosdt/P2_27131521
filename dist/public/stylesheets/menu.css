@@ -179,28 +179,91 @@ footer {
 }
 
 
+
 @media (max-width: 768px) {
+    h1 {
+        margin: 80px 0 20px;
+        font-size: 2rem;
+    }
+    
+    .barra {
+        height: auto;
+        padding: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .barra .opcion {
+        padding: 5px 10px;
+        font-size: 0.9rem;
+    }
+    
+    .contenedor {
+        padding: 15px;
+        width: 98%;
+    }
+    
     .galeria {
-        grid-template-columns: 1fr; 
-        gap: 15px; 
-        grid-template-columns: repeat(2, 1fr); 
+        grid-template-columns: 2fr !important; 
+        gap: 15px;
     }
-  
+    
+    .item {
+        max-width: 100%;
+        padding: 10px;
+    }
+    
     .imagen {
-        width: 100%; 
-        max-width: 300px; 
-        height: auto; 
+        height: 150px;
     }
-  
+    
+    .selection {
+        width: 120px;
+        height: 40px;
+        font-size: 14px;
+    }
+    
+    .selection a {
+        line-height: 36px;
+    }
+}
+
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .galeria {
+        grid-template-columns: repeat(2, 2fr);
+    }
+}
+
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+        margin: 70px 0 15px;
+    }
+    
     .item h3 {
-        font-size: 1rem; 
+        font-size: 1.1rem;
     }
-  
-    .item p {
-        font-size: 0.9rem; 
+    
+    .item p, .item .hora {
+        font-size: 0.85rem;
     }
-  
-    .item .hora {
-        font-size: 0.9rem; 
-    }
-  }
+}
+
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+.barra {
+    gap: 5px;
+    padding: 5px;
+}
+
+.barra .opcion {
+    padding: 8px 5px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}

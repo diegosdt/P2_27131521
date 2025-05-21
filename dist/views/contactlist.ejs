@@ -26,6 +26,7 @@
                 <th>Comentario</th>
                 <th>IP</th>
                 <th>Fecha</th>
+                <th>pais</th>
             </tr>
         </thead>
         <tbody>
@@ -36,6 +37,7 @@
                     <td data-label="Comentario"><%= contact.comment %></td>
                     <td data-label="IP"><%= contact.ip_address %></td>
                     <td data-label="Fecha"><%= new Date(contact.created_at).toLocaleString() %></td>
+                    <td data-label="country"><%= contact.country %></td>
                 </tr>
             <% }); %>
         </tbody>

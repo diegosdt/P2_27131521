@@ -21,6 +21,7 @@ export async function createTables() {
             name TEXT NOT NULL,
             comment TEXT NOT NULL,
             ip_address TEXT NOT NULL,
+            country TEXT NOT NULL,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
         

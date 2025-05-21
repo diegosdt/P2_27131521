@@ -29,6 +29,10 @@ router.get('/payment', (req, res) => {
   res.render('payment');
 });
 
+router.get('/error', (req, res) => {
+  res.render('error');
+});
+
 router.get('/exito', (req, res) => {
   res.render('exito');
 });

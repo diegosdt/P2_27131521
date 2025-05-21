@@ -7,18 +7,20 @@ export class ContactsModel {
         name: string;
         comment: string;
         ipAddress: string;
+        country: string;
     }) {
         const db = await initializeDB();
         
         try {
             const result = await db.run(
-                `INSERT INTO contacts (email, name, comment, ip_address) 
-                 VALUES (?, ?, ?, ?)`,
+                `INSERT INTO contacts (email, name, comment, ip_address, country) 
+                 VALUES (?, ?, ?, ?, ?)`,
                 [
                     contactData.email,
                     contactData.name,
                     contactData.comment,
-                    contactData.ipAddress
+                    contactData.ipAddress,
+                    contactData.country
                 ]
             );
             
