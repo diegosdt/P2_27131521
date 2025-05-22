@@ -30,7 +30,7 @@ class ContactsController {
                 else {
                     ipAddress = req.connection.remoteAddress || ''; // Usar IP del cliente si no hay proxy
                 }
-                console.log("🌍 IP detectada:", ipAddress); // Log para diagnóstico
+                console.log(" IP detectada:", ipAddress); // Log para diagnóstico
                 const recaptchaToken = req.body['g-recaptcha-response'];
                 // Verificar reCAPTCHA con Google
                 const secretKey = '6LeT4TgrAAAAAEO3fxdHG3azJ5B6lNrlJ0wG1Y6a';
@@ -47,17 +47,17 @@ class ContactsController {
                 // Obtener el país desde ip-api.com con validación correcta
                 let country = 'Desconocido';
                 try {
-                    const geoResponse = yield axios_1.default.get('https://ip-api.com/json/${ipAddress}');
-                    console.log("🌍 Respuesta de ip-api:", geoResponse.data); // Diagnóstico
+                    const geoResponse = yield axios_1.default.get(`https://ip-api.com/json/${ipAddress}`);
+                    console.log(" Respuesta de ip-api:", geoResponse.data); // Diagnóstico
                     if (geoResponse.data && geoResponse.data.country) {
                         country = geoResponse.data.country;
                     }
                     else {
-                        console.warn("⚠️ País no encontrado en la respuesta de ip-api.");
+                        console.warn(" País no encontrado en la respuesta de ip-api.");
                     }
                 }
                 catch (geoError) {
-                    console.error('❌ Error al obtener país:', geoError);
+                    console.error(' Error al obtener país:', geoError);
                 }
                 // Guardar datos incluyendo el país en la base de datos
                 yield this.model.addContact({
