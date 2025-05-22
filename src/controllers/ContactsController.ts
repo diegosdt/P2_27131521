@@ -67,7 +67,7 @@ export class ContactsController {
             if (ipAddress) {
                 try {
                     const geoResponse = await axios.get<GeoResponse>(
-                        'http://ip-api.com/json/${ipAddress}?fields=status,message,country,countryCode'
+                        `http://ip-api.com/json/${ipAddress}?fields=status,message,country,countryCode`
                     );
                     
                     console.log("🌍 Respuesta de ip-api:", geoResponse.data);
