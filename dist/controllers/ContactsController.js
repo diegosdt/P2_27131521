@@ -23,16 +23,14 @@ class ContactsController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // Capturar IP pública correctamente
-                let ipAddress = req.headers['x-forwarded-for'] || req.ip || req.connection.remoteAddress || '';
-                // Limpiar la dirección IP
-                ipAddress = ipAddress.split(',')[0].trim();
-                ipAddress = ipAddress.replace(/^::ffff:/, ''); // Eliminar prefijo IPv6 para IPv4
-                // Si es localhost, usar una IP pública de prueba o dejarlo como desconocido
-                if (ipAddress === '127.0.0.1' || ipAddress === '::1') {
-                    console.warn('⚠️ Dirección local detectada, no se puede geolocalizar');
-                    ipAddress = ''; // O podrías usar '8.8.8.8' para pruebas
+                let ipAddress = req.headers['x-forwarded-for'];
+                if (typeof ipAddress === 'string') {
+                    ipAddress = ipAddress.split(',')[0].trim(); // Tomar primera IP si hay múltiples
                 }
-                console.log("🌍 IP detectada:", ipAddress);
+                else {
+                    ipAddress = req.connection.remoteAddress || ''; // Usar IP del cliente si no hay proxy
+                }
+                console.log("🌍 IP detectada:", ipAddress); // Log para diagnóstico
                 const recaptchaToken = req.body['g-recaptcha-response'];
                 // Verificar reCAPTCHA con Google
                 const secretKey = '6LeT4TgrAAAAAEO3fxdHG3azJ5B6lNrlJ0wG1Y6a';
@@ -46,43 +44,38 @@ class ContactsController {
                 if (!data.success) {
                     return res.status(400).render('error', { alertMessage: 'Verificación de reCAPTCHA fallida.' });
                 }
-                // Obtener el país desde ip-api.com
+                // Obtener el país desde ip-api.com con validación correcta
                 let country = 'Desconocido';
-                let countryCode = '';
-                if (ipAddress) {
-                    try {
-                        const geoResponse = yield axios_1.default.get('http://ip-api.com/json/${ipAddress}?fields=status,message,country,countryCode');
-                        console.log("🌍 Respuesta de ip-api:", geoResponse.data);
-                        if (geoResponse.data.status === 'success') {
-                            country = geoResponse.data.country || 'Desconocido';
-                            countryCode = geoResponse.data.countryCode || '';
-                            console.log('✅ País detectado: ${country} (${countryCode})');
-                        }
-                        else {
-                            console.warn('⚠️ IP-API no pudo determinar el país. Razón: ${geoResponse.data.message }');
-                        }
+                try {
+                    const geoResponse = yield axios_1.default.get('https://ip-api.com/json/${ipAddress}');
+                    console.log("🌍 Respuesta de ip-api:", geoResponse.data); // Diagnóstico
+                    if (geoResponse.data && geoResponse.data.country) {
+                        country = geoResponse.data.country;
                     }
-                    catch (geoError) {
-                        console.error('❌ Error al obtener país:', geoError instanceof Error ? geoError.message : geoError);
+                    else {
+                        console.warn("⚠️ País no encontrado en la respuesta de ip-api.");
                     }
                 }
-                // Guardar datos en la base de datos
+                catch (geoError) {
+                    console.error('❌ Error al obtener país:', geoError);
+                }
+                // Guardar datos incluyendo el país en la base de datos
                 yield this.model.addContact({
                     email: req.body.email,
                     name: req.body.name,
                     comment: req.body.comment,
                     ipAddress: ipAddress,
-                    country: country,
-                    countryCode: countryCode
+                    country: country
                 });
                 res.redirect('/confirmacion');
             }
             catch (error) {
-                console.error('Error al guardar contacto:', error instanceof Error ? error.message : error);
+                console.error('Error al guardar contacto:', error);
                 res.status(500).render('error', { message: 'Ocurrió un error al procesar tu mensaje' });
             }
         });
     }
+    // Método list() para mostrar contactos registrados
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -90,7 +83,7 @@ class ContactsController {
                 res.render('contactlist', { contacts });
             }
             catch (error) {
-                console.error('Error al listar contactos:', error instanceof Error ? error.message : error);
+                console.error('Error al listar contactos:', error);
                 res.status(500).render('error', { message: 'Error al cargar la lista de contactos' });
             }
         });

@@ -8,7 +8,7 @@ export class ContactsModel {
         comment: string;
         ipAddress: string;
         country: string;
-        countryCode:string
+    
     }) {
         const db = await initializeDB();
         
