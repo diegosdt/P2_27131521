@@ -10,7 +10,9 @@ interface RecaptchaResponse {
 }
 
 interface GeoResponse {
-    country: string;
+    status?: string;
+    message?: string;
+    country?: string;
 }
 
 export class ContactsController {
@@ -25,16 +27,19 @@ export class ContactsController {
             // Capturar IP pública correctamente
             let ipAddress = req.headers['x-forwarded-for'];
             if (typeof ipAddress === 'string') {
-                ipAddress = ipAddress.split(',')[0].trim(); // Tomar primera IP si hay múltiples
+                ipAddress = ipAddress.split(',')[0].trim();
             } else {
-                ipAddress = req.connection.remoteAddress || ''; // Usar IP del cliente si no hay proxy
+                ipAddress = req.connection.remoteAddress || ''; 
             }
 
-            console.log(" IP detectada:", ipAddress); // Log para diagnóstico
+            console.log("IP detectada:", ipAddress);
+
+            // Validar que la IP sea válida
+            if (!ipAddress || ipAddress === "127.0.0.1" || ipAddress === "::1") {
+                console.warn("IP no válida o acceso local, país no será detectado.");
+            }
 
             const recaptchaToken = req.body['g-recaptcha-response'];  
-
-            // Verificar reCAPTCHA con Google
             const secretKey = '6LeT4TgrAAAAAEO3fxdHG3azJ5B6lNrlJ0wG1Y6a';
             const verificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
 
@@ -56,14 +61,33 @@ export class ContactsController {
             let country = 'Desconocido';
             try {
                 const geoResponse = await axios.get<GeoResponse>(`https://ip-api.com/json/${ipAddress}`);
-                console.log(" Respuesta de ip-api:", geoResponse.data); // Diagnóstico
-                if (geoResponse.data && geoResponse.data.country) {
+                console.log("Respuesta completa de ip-api:", geoResponse.data);
+                
+                if (geoResponse.data.status === "fail") {
+                    console.warn("Error en la respuesta de ip-api:", geoResponse.data.message);
+                } else if (geoResponse.data.country) {
                     country = geoResponse.data.country;
                 } else {
-                    console.warn(" País no encontrado en la respuesta de ip-api.");
+                    console.warn("País no encontrado en la respuesta.");
                 }
             } catch (geoError) {
-                console.error(' Error al obtener país:', geoError);
+                console.error('Error al obtener país desde ip-api:', geoError);
+                console.log("Intentando con ipinfo.io...");
+                
+                // Alternativa con ipinfo.io si ip-api falla
+             interface IpInfoResponse {
+                country?: string;
+             }
+
+                try {
+                    const fallbackResponse = await axios.get<IpInfoResponse>(`https://ipinfo.io/${ipAddress}/json`);
+                    console.log("Respuesta alternativa de ipinfo.io:", fallbackResponse.data);
+                    if (fallbackResponse.data.country) {
+                        country = fallbackResponse.data.country;
+                    }
+                } catch (fallbackError) {
+                    console.error('Error al obtener país desde ipinfo.io:', fallbackError);
+                }
             }
 
             // Guardar datos incluyendo el país en la base de datos
@@ -82,7 +106,6 @@ export class ContactsController {
         }
     }
 
-    // Método list() para mostrar contactos registrados
     async list(req: Request, res: Response) {
         try {
             const contacts = await this.model.getAllContacts();
