@@ -15,80 +15,143 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContactsController = void 0;
 const axios_1 = __importDefault(require("axios"));
 const ContactsModel_1 = require("../models/ContactsModel");
+const nodemailer_1 = __importDefault(require("nodemailer"));
+const dotenv_1 = __importDefault(require("dotenv"));
+// Cargar variables de entorno
+dotenv_1.default.config();
 class ContactsController {
     constructor() {
+        var _a;
+        // Verificar variables de entorno requeridas
+        this.validateEnvVariables();
         this.model = new ContactsModel_1.ContactsModel();
+        this.emailRecipients = ((_a = process.env.EMAILDESTINO) === null || _a === void 0 ? void 0 : _a.split(',')) || [];
+        this.transporter = nodemailer_1.default.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.GMAIL_USER,
+                pass: process.env.GMAIL_APP_PASSWORD
+            },
+            tls: {
+                rejectUnauthorized: process.env.NODE_ENV === 'production'
+            }
+        });
+    }
+    validateEnvVariables() {
+        const requiredVars = ['GMAIL_USER', 'GMAIL_APP_PASSWORD', 'CONTRARECAPTCHA'];
+        const missingVars = requiredVars.filter(varName => !process.env[varName]);
+        if (missingVars.length > 0) {
+            throw new Error(`Faltan variables de entorno requeridas: ${missingVars.join(', ')}`);
+        }
+    }
+    sendNotificationEmail(contactData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.emailRecipients.length === 0) {
+                console.warn('No hay destinatarios configurados para el correo');
+                return;
+            }
+            try {
+                yield this.transporter.verify();
+                const mailOptions = {
+                    from: `"Formulario de Contacto" <${process.env.GMAIL_USER}>`,
+                    to: this.emailRecipients.join(', '),
+                    subject: 'Nuevo formulario completado',
+                    html: `
+                    <h1>Nuevo formulario recibido</h1>
+                    <p><strong>Nombre:</strong> ${contactData.name}</p>
+                    <p><strong>Email:</strong> ${contactData.email}</p>
+                    <p><strong>Comentario:</strong> ${contactData.comment}</p>
+                    <p><strong>Dirección IP:</strong> ${contactData.ipAddress}</p>
+                    <p><strong>País:</strong> ${contactData.country}</p>
+                    <p><strong>Fecha/Hora:</strong> ${contactData.date}</p>
+                `
+                };
+                const info = yield this.transporter.sendMail(mailOptions);
+                console.log('Correo enviado:', info.messageId);
+            }
+            catch (error) {
+                console.error('Error al enviar correo:', error);
+                throw new Error('Falló el envío del correo de notificación');
+            }
+        });
+    }
+    getCountryFromIp(ipAddress) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!ipAddress || ipAddress === "127.0.0.1" || ipAddress === "::1") {
+                return 'Localhost';
+            }
+            try {
+                // Primero intentamos con ip-api.com
+                const geoResponse = yield axios_1.default.get(`https://ip-api.com/json/${ipAddress}`);
+                if (geoResponse.data.status === "success" && geoResponse.data.country) {
+                    return geoResponse.data.country;
+                }
+                // Si falla, intentamos con ipinfo.io
+                const fallbackResponse = yield axios_1.default.get(`https://ipinfo.io/${ipAddress}/json`);
+                return fallbackResponse.data.country || 'Desconocido';
+            }
+            catch (error) {
+                console.error('Error al obtener país:', error);
+                return 'Desconocido';
+            }
+        });
     }
     add(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             try {
-                // Capturar IP pública correctamente
-                let ipAddress = req.headers['x-forwarded-for'];
-                if (typeof ipAddress === 'string') {
-                    ipAddress = ipAddress.split(',')[0].trim();
-                }
-                else {
-                    ipAddress = req.connection.remoteAddress || '';
-                }
-                console.log("IP detectada:", ipAddress);
-                // Validar que la IP sea válida
-                if (!ipAddress || ipAddress === "127.0.0.1" || ipAddress === "::1") {
-                    console.warn("IP no válida o acceso local, país no será detectado.");
-                }
+                // Validar reCAPTCHA
                 const recaptchaToken = req.body['g-recaptcha-response'];
-                const secretKey = '6LeT4TgrAAAAAEO3fxdHG3azJ5B6lNrlJ0wG1Y6a';
-                const verificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
-                const verificationResponse = yield axios_1.default.post(verificationUrl, new URLSearchParams({
-                    secret: secretKey,
+                if (!recaptchaToken) {
+                    throw new Error('Token reCAPTCHA no proporcionado');
+                }
+                // Verificación reCAPTCHA
+                const verificationResponse = yield axios_1.default.post('https://www.google.com/recaptcha/api/siteverify', new URLSearchParams({
+                    secret: process.env.CONTRARECAPTCHA || '',
                     response: recaptchaToken,
-                    remoteip: ipAddress
-                }));
-                const { data } = verificationResponse;
-                if (!data.success) {
-                    return res.status(400).render('error', { alertMessage: 'Verificación de reCAPTCHA fallida.' });
+                    remoteip: req.ip || ''
+                }).toString(), {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+                if (!verificationResponse.data.success) {
+                    const errorCodes = ((_a = verificationResponse.data['error-codes']) === null || _a === void 0 ? void 0 : _a.join(', ')) || 'desconocido';
+                    console.error('Error reCAPTCHA:', errorCodes);
+                    throw new Error('Verificación reCAPTCHA fallida');
                 }
-                // Obtener el país desde ip-api.com con validación correcta
-                let country = 'Desconocido';
-                try {
-                    const geoResponse = yield axios_1.default.get(`https://ip-api.com/json/${ipAddress}`);
-                    console.log("Respuesta completa de ip-api:", geoResponse.data);
-                    if (geoResponse.data.status === "fail") {
-                        console.warn("Error en la respuesta de ip-api:", geoResponse.data.message);
-                    }
-                    else if (geoResponse.data.country) {
-                        country = geoResponse.data.country;
-                    }
-                    else {
-                        console.warn("País no encontrado en la respuesta.");
-                    }
+                // Obtener IP del cliente
+                let ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+                if (Array.isArray(ipAddress)) {
+                    ipAddress = ipAddress[0];
                 }
-                catch (geoError) {
-                    console.error('Error al obtener país desde ip-api:', geoError);
-                    console.log("Intentando con ipinfo.io...");
-                    try {
-                        const fallbackResponse = yield axios_1.default.get(`https://ipinfo.io/${ipAddress}/json`);
-                        console.log("Respuesta alternativa de ipinfo.io:", fallbackResponse.data);
-                        if (fallbackResponse.data.country) {
-                            country = fallbackResponse.data.country;
-                        }
-                    }
-                    catch (fallbackError) {
-                        console.error('Error al obtener país desde ipinfo.io:', fallbackError);
-                    }
-                }
-                // Guardar datos incluyendo el país en la base de datos
-                yield this.model.addContact({
+                ipAddress = (ipAddress === null || ipAddress === void 0 ? void 0 : ipAddress.toString().split(',')[0].trim()) || '';
+                // Obtener país
+                const country = yield this.getCountryFromIp(ipAddress);
+                // Datos del contacto
+                const contactData = {
                     email: req.body.email,
                     name: req.body.name,
                     comment: req.body.comment,
                     ipAddress: ipAddress,
-                    country: country
-                });
+                    country: country,
+                    date: new Date().toLocaleString('es-ES', {
+                        timeZone: 'America/Mexico_City',
+                        dateStyle: 'full',
+                        timeStyle: 'long'
+                    })
+                };
+                // Guardar en base de datos
+                yield this.model.addContact(contactData);
+                // Enviar notificación por correo
+                yield this.sendNotificationEmail(contactData);
                 res.redirect('/confirmacion');
             }
             catch (error) {
-                console.error('Error al guardar contacto:', error);
-                res.status(500).render('error', { message: 'Ocurrió un error al procesar tu mensaje' });
+                console.error('Error en el formulario:', error);
+                res.status(500).render('error', {
+                    message: error instanceof Error ? error.message : 'Ocurrió un error inesperado'
+                });
             }
         });
     }
@@ -100,7 +163,9 @@ class ContactsController {
             }
             catch (error) {
                 console.error('Error al listar contactos:', error);
-                res.status(500).render('error', { message: 'Error al cargar la lista de contactos' });
+                res.status(500).render('error', {
+                    message: 'Error al cargar la lista de contactos'
+                });
             }
         });
     }
