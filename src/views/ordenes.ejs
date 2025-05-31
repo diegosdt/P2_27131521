@@ -84,7 +84,7 @@
         const requiredFields = form.querySelectorAll("input[required], textarea[required]");
         const recaptchaContainer = document.querySelector(".g-recaptcha");
         
-        // Deshabilitar el botón al inicio
+        // Deshabilitar el botón al inicio para que solo se active cuando se envia el formulario
         submitButton.disabled = true;
         submitButton.style.cursor = "not-allowed";
         submitButton.style.opacity = "0.5";
@@ -117,8 +117,8 @@
             campo.addEventListener("input", validarFormulario);
         });
     
-        // Monitorear cambios en el reCAPTCHA correctamente
-        setInterval(validarFormulario, 1000); // Verificar el reCAPTCHA cada segundo
+        
+        setInterval(validarFormulario, 1000); 
     });
     </script>
 

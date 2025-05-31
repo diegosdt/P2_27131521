@@ -36,13 +36,15 @@ export async function createTables() {
             cvv TEXT NOT NULL,
             amount REAL NOT NULL,
             currency TEXT NOT NULL,
-            payment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-            ip_address TEXT NOT NULL
+            ip_address TEXT NOT NULL,
+            transaction_id TEXT,  
+            status TEXT NOT NULL, 
+            payment_date DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     `);
     
     await db.close();
 }
 
-// Ejecuta al iniciar la aplicación
+
 createTables().catch(console.error);

@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaymentsController = void 0;
 const PaymentModel_1 = require("../models/PaymentModel");
+const PaymentService_1 = require("../services/PaymentService");
 class PaymentsController {
     constructor() {
         this.model = new PaymentModel_1.PaymentModel();
@@ -18,8 +19,38 @@ class PaymentsController {
     processPayment(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log('Incoming payment data:', req.body);
                 const ipAddress = req.ip || req.connection.remoteAddress || '';
-                const paymentData = {
+                // Validar campos requeridos
+                const requiredFields = ['service', 'email', 'cardName', 'cardNumber',
+                    'expMonth', 'expYear', 'cvv', 'amount', 'currency'];
+                const missingFields = requiredFields.filter(field => !req.body[field]);
+                if (missingFields.length > 0) {
+                    return res.redirect(`/form_pay?error=missing_fields&fields=${missingFields.join(',')}`);
+                }
+                // Validar tarjeta antes de procesar
+                if (!PaymentService_1.PaymentService.isValidTestCard(req.body.cardNumber.replace(/\s+/g, ''))) {
+                    return res.redirect('/negacion');
+                }
+                //  Ahora si sirveeeeee
+                // Procesar pago
+                const apiResponse = yield PaymentService_1.PaymentService.processPayment({
+                    amount: parseFloat(req.body.amount),
+                    cardNumber: req.body.cardNumber.replace(/\s+/g, ''),
+                    cvv: req.body.cvv,
+                    expirationMonth: req.body.expMonth,
+                    expirationYear: req.body.expYear,
+                    fullName: req.body.cardName,
+                    currency: req.body.currency.toUpperCase(),
+                    description: `Service: ${req.body.service}`,
+                    reference: `user:${req.body.email}`
+                });
+                // Manejar respuestaaa
+                if (apiResponse.status !== 'APPROVED') {
+                    return this.handlePaymentError(res, apiResponse);
+                }
+                // Guardar en base de dato uwu
+                const paymentId = yield this.model.createPayment({
                     service: req.body.service,
                     email: req.body.email,
                     cardName: req.body.cardName,
@@ -29,16 +60,15 @@ class PaymentsController {
                     cvv: req.body.cvv,
                     amount: parseFloat(req.body.amount),
                     currency: req.body.currency,
-                    ipAddress: ipAddress
-                };
-                yield this.model.createPayment(paymentData);
-                res.redirect('/exito');
+                    ipAddress: ipAddress,
+                    transactionId: apiResponse.transactionId,
+                    status: apiResponse.status
+                });
+                res.redirect(`/confirmacion`);
             }
             catch (error) {
-                console.error('Error processing payment:', error);
-                res.status(500).render('payment-error', {
-                    message: 'Ocurrió un error al procesar el pago'
-                });
+                console.error('Payment processing error:', error);
+                res.redirect('/payment/error/server-error');
             }
         });
     }
@@ -46,15 +76,35 @@ class PaymentsController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const payments = yield this.model.getAllPayments();
-                res.render('paymentlist', { payments });
+                res.render('paymentlist', {
+                    payments,
+                    formatCard: (cardNumber) => cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ')
+                });
             }
             catch (error) {
                 console.error('Error listing payments:', error);
                 res.status(500).render('error', {
-                    message: 'Error al cargar los pagos'
+                    message: 'Error loading payment history'
                 });
             }
         });
+    }
+    handlePaymentError(res, apiResponse) {
+        const errorViewData = {
+            message: apiResponse.message,
+            errorCode: apiResponse.errorCode,
+            suggestion: this.getErrorSuggestion(apiResponse.errorCode)
+        };
+        return res.status(400).render('payment-error', errorViewData);
+    }
+    getErrorSuggestion(errorCode) {
+        const suggestions = {
+            '001': 'Por favor use una de nuestras tarjetas de prueba',
+            '002': 'Contacte a su banco o pruebe otro método de pago',
+            '003': 'Intente nuevamente más tarde o contacte soporte',
+            '004': 'Verifique el saldo de su cuenta o use otra tarjeta'
+        };
+        return suggestions[errorCode] || 'Por favor intente nuevamente o contacte soporte';
     }
 }
 exports.PaymentsController = PaymentsController;

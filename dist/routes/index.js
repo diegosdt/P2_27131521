@@ -38,6 +38,9 @@ router.get('/admin/paymentlist', controllerPayment.listPayments.bind(controllerP
 router.get('/confirmacion', (req, res) => {
     res.render('confirmacion', { title: 'informacion' });
 });
+router.get('/negacion', (req, res) => {
+    res.render('negacion', { title: 'informacion' });
+});
 router.post('/contact/add', controllerContacts.add.bind(controllerContacts));
 router.get('/admin/contactlist', controllerContacts.list.bind(controllerContacts));
 router.get('/index', (req, res) => {

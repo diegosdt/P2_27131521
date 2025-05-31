@@ -45,6 +45,10 @@ router.get('/confirmacion', (req: Request, res: Response) => {
   res.render('confirmacion', { title: 'informacion' });
 });
 
+router.get('/negacion', (req: Request, res: Response) => {
+  res.render('negacion', { title: 'informacion' });
+});
+
 router.post('/contact/add', controllerContacts.add.bind(controllerContacts));
 
 router.get('/admin/contactlist', controllerContacts.list.bind(controllerContacts));

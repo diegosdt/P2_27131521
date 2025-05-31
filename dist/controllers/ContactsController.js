@@ -17,12 +17,12 @@ const axios_1 = __importDefault(require("axios"));
 const ContactsModel_1 = require("../models/ContactsModel");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const dotenv_1 = __importDefault(require("dotenv"));
-// Cargar variables de entorno
+// Cargar variables de entorno uwu
 dotenv_1.default.config();
 class ContactsController {
     constructor() {
         var _a;
-        // Verificar variables de entorno requeridas
+        // Verificar  las variables de entorno que voy a usar
         this.validateEnvVariables();
         this.model = new ContactsModel_1.ContactsModel();
         this.emailRecipients = ((_a = process.env.EMAILDESTINO) === null || _a === void 0 ? void 0 : _a.split(',')) || [];
@@ -81,12 +81,10 @@ class ContactsController {
                 return 'Localhost';
             }
             try {
-                // Primero intentamos con ip-api.com
                 const geoResponse = yield axios_1.default.get(`https://ip-api.com/json/${ipAddress}`);
                 if (geoResponse.data.status === "success" && geoResponse.data.country) {
                     return geoResponse.data.country;
                 }
-                // Si falla, intentamos con ipinfo.io
                 const fallbackResponse = yield axios_1.default.get(`https://ipinfo.io/${ipAddress}/json`);
                 return fallbackResponse.data.country || 'Desconocido';
             }
@@ -100,12 +98,12 @@ class ContactsController {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
             try {
-                // Validar reCAPTCHA
+                // Validar recap
                 const recaptchaToken = req.body['g-recaptcha-response'];
                 if (!recaptchaToken) {
                     throw new Error('Token reCAPTCHA no proporcionado');
                 }
-                // Verificación reCAPTCHA
+                // Verificación recaptcha
                 const verificationResponse = yield axios_1.default.post('https://www.google.com/recaptcha/api/siteverify', new URLSearchParams({
                     secret: process.env.CONTRARECAPTCHA || '',
                     response: recaptchaToken,
@@ -120,7 +118,7 @@ class ContactsController {
                     console.error('Error reCAPTCHA:', errorCodes);
                     throw new Error('Verificación reCAPTCHA fallida');
                 }
-                // Obtener IP del cliente
+                // Obtener IP del usuario uwu
                 let ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
                 if (Array.isArray(ipAddress)) {
                     ipAddress = ipAddress[0];
@@ -128,7 +126,7 @@ class ContactsController {
                 ipAddress = (ipAddress === null || ipAddress === void 0 ? void 0 : ipAddress.toString().split(',')[0].trim()) || '';
                 // Obtener país
                 const country = yield this.getCountryFromIp(ipAddress);
-                // Datos del contacto
+                // Datos del contacto que se registrara
                 const contactData = {
                     email: req.body.email,
                     name: req.body.name,

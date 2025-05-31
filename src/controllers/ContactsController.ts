@@ -4,7 +4,7 @@ import { ContactsModel } from '../models/ContactsModel';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 
-// Cargar variables de entorno
+// Cargar variables de entorno uwu
 dotenv.config();
 
 interface RecaptchaResponse {
@@ -30,7 +30,7 @@ export class ContactsController {
     private emailRecipients: string[];
 
     constructor() {
-        // Verificar variables de entorno requeridas
+        // Verificar  las variables de entorno que voy a usar
         this.validateEnvVariables();
         
         this.model = new ContactsModel();
@@ -102,14 +102,14 @@ export class ContactsController {
         }
 
         try {
-            // Primero intentamos con ip-api.com
+            
             const geoResponse = await axios.get<GeoResponse>(`https://ip-api.com/json/${ipAddress}`);
             
             if (geoResponse.data.status === "success" && geoResponse.data.country) {
                 return geoResponse.data.country;
             }
 
-            // Si falla, intentamos con ipinfo.io
+            
             const fallbackResponse = await axios.get<IpInfoResponse>(`https://ipinfo.io/${ipAddress}/json`);
             return fallbackResponse.data.country || 'Desconocido';
         } catch (error) {
@@ -120,13 +120,13 @@ export class ContactsController {
 
     async add(req: Request, res: Response): Promise<void> {
         try {
-            // Validar reCAPTCHA
+            // Validar recap
             const recaptchaToken = req.body['g-recaptcha-response'];
             if (!recaptchaToken) {
                 throw new Error('Token reCAPTCHA no proporcionado');
             }
 
-            // Verificación reCAPTCHA
+            // Verificación recaptcha
             const verificationResponse = await axios.post<RecaptchaResponse>(
                 'https://www.google.com/recaptcha/api/siteverify',
                 new URLSearchParams({
@@ -147,7 +147,7 @@ export class ContactsController {
                 throw new Error('Verificación reCAPTCHA fallida');
             }
 
-            // Obtener IP del cliente
+            // Obtener IP del usuario uwu
             let ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
             if (Array.isArray(ipAddress)) {
                 ipAddress = ipAddress[0];
@@ -157,7 +157,7 @@ export class ContactsController {
             // Obtener país
             const country = await this.getCountryFromIp(ipAddress);
 
-            // Datos del contacto
+            // Datos del contacto que se registrara
             const contactData = {
                 email: req.body.email,
                 name: req.body.name,
