@@ -1,0 +1,76 @@
+Como implemente cada API?
+
+Gogle recaptcha: para implementar Google recapcha primeramente me registre,
+ elegi recaptcha v2 que es la casilla de verificación luego de eso obtuve dos 
+ claves. Una de ella para la vista ejs y tra una clave secreta que hace parte 
+ del sistema interno el cual la puse como variable de entorno y le puse la 
+ variable CONTRARECAPTCHA. Luego de haber realizado esto y haber puesto el 
+ script de recaptcha realizo una validación. En mi caso realice dos 
+ varificaciones una en el controlador o sistema interno para que el usuario 
+ no pueda enviar el formulario hasta que haya completado todos los campos el 
+ formulario incluyendo el recaptcha y la otra fue mediante un script en la 
+ vista (esta aunque hace parte de la seguridad del formulario la implemente mas 
+ que todo por que me gustaba mas su funcionalidad, el script básicamente 
+ inhabilita  el botón de enviar el formulario hasta que se hayan completado
+  todos los campos del mismo incluyendo el recaptcha este script lo consegui
+   mediante un video de tiktok jeje pero lo puse mas que todo por estética). 
+   Con respecto a la validación interna del sistema de recaptcha hice una 
+   verificación donde se valida el token luego procedo a una verificación donde 
+   mediante de una condicional if verifico si el recaptcha fue realizado o no 
+   correctamente y según la respuesta me enviaría un mensaje console.error o una 
+   respuesta correcta para comprobación de la misma.
+
+
+GOOGLE analytic. Lo primero que hice fue registrarme en la cuenta de Google
+ analitic, le doy a comenzar a medir el cual tendre que crear una cuenta con 
+ mis datos correspondientes ,crear una propiedad el cual puse los datos de mi
+  web. Le puse dos dominion (uno local y el de render) luego le doy a web y ahí
+   le puse el link de mi web y el nombre y automáticamente me despliega una 
+   vista con un código el cual me explica de forma de documentacion pero en 
+   detalles del lfujo de web me da mi id de medición el cual configurare con 
+   mi pagina.en instrucciones de etiqueta me da mi código que lo usare en mi 
+   web y ya, en la pagina principal de analytic me aparece el despliegue de 
+   control de usuarios y pagos de la web. Cuantas personas entran a la web etc
+
+
+Geolocalización por IP: realizo un método get que consulta a la api, aquí tuve 
+que implementar dos apis porque por lo menos a mi ip api me estaba dando los 
+datos aveces. Cuando podía me los daba y aveces no asi que puse ip api como la 
+api principal de geolocalización pero si en caso de que esa api falle tengo
+ ipinfo.io como respaldo. Luego de obtener los datos necesarios ip y 
+ localización los guardo en la base de datos específicamente en la tabla 
+ del contacto y bueno luego lo muestro en mi cuadro de la vista de registrados 
+ mediante comandos ejs dentro de un div.
+
+Notificacion por correo Electronico: para esto use la Nodemailer en contacts 
+controller que es mi controlador de contacto configuro nodemailer en el 
+controlador junto con las credenciales de Gmail y yop mail. Cree variables 
+de entorno para el usuario del remitente y del destino y para la contrase;a. 
+GMAIL_USER,GMAIL_APP_PASSWORD aquí junto con las de recaptcha luego construyo 
+un método llamado sendnoticiationemail que casicamente aquí implemento la lógica
+ de envio. Mediante una condicional if verifico en caso que no haya un 
+ destinatario configuración para el correo, y valido cada una de los catos 
+ (en caso para verificar la conexión con el sevidor, para enviar mensaje de que 
+ el formulario a sido completado, y también un peque;o código html que 
+ estructura los datos que el usuario ingreso en el formulario, esto para que en 
+ la notificación del correo aparezcan
+
+
+APY de pago falso: esta api fue la que mas me costo lo primero que hice fue ir a 
+la pagina e ir por la documentación el cual me dan un código  que lo usare para 
+validación, sin embargo lo puse dentro de una variable de entorno 
+FAKE_PAYMENT_API_KEY. En mi controlador de pago lo primero que hago es ir a la
+ clase paymentcontroller e inicializo el modelo de pago en el constructor 
+ payment model maneja la interacción con la base de datos. Luego tengo el método 
+ processpayment el cual maneja la lógica de validación y procesamiento del pago.
+  Primero verifico que todos los campos esten presentes. Service, email, 
+  cardname etc, aquí lo que hice fue definir un array con los campos 
+  obligstorios básicamente se filtran los campos por si algunos falta se 
+  redirija a un mensaje de error, hago la validación de la tarjeta para que se
+   usen las tarjetas de prueba si la tarjeta es valida se envia una solicitud 
+   de pago a la api se envían los datos del pago a paymentservice el cual luego 
+   se maneja si el pago es o no aprobado, se manejan los errores mediante un
+    mensaje si fue aprobado o no, si es diferente a aprobado me manda a un error.
+      Pero si el pago es exitoso paso a guardar los datos en la base de datos 
+      pero si hay error obviamente no se guardan y procede a enviarse 
+      un mensaje .
