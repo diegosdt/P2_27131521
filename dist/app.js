@@ -8,10 +8,21 @@ const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const morgan_1 = __importDefault(require("morgan"));
+const express_session_1 = __importDefault(require("express-session"));
 const index_1 = __importDefault(require("./routes/index"));
 const users_1 = __importDefault(require("./routes/users"));
 const app = (0, express_1.default)();
 const port = 3000;
+app.use((0, express_session_1.default)({
+    secret: 'your-secret-key', // Cambia esto por una clave secreta segura
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: false, // Cambia a true si usas HTTPS
+        maxAge: 15 * 60 * 1000 // Expiración de la sesión: 15 minutos
+    }
+}));
 app.set('views', path_1.default.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use((0, morgan_1.default)('dev'));

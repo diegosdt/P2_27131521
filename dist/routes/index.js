@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const ContactsController_1 = require("../controllers/ContactsController");
 const PaymentControler_1 = require("../controllers/PaymentControler");
+const UserController_1 = require("../controllers/UserController"); // Cambia UserController por AuthController
 const router = express_1.default.Router();
 const controllerContacts = new ContactsController_1.ContactsController();
 const controllerPayment = new PaymentControler_1.PaymentsController();
@@ -33,6 +34,15 @@ router.get('/error', (req, res) => {
 router.get('/exito', (req, res) => {
     res.render('exito');
 });
+router.get('/registrado', (req, res) => {
+    res.render('registrado', { error: null });
+});
+router.get('/login', (req, res) => {
+    res.render('login', { error: null });
+});
+router.get('/register', (req, res) => {
+    res.render('register', { error: null });
+});
 router.post('/payment/add', controllerPayment.processPayment.bind(controllerPayment));
 router.get('/admin/paymentlist', controllerPayment.listPayments.bind(controllerPayment));
 router.get('/confirmacion', (req, res) => {
@@ -43,6 +53,8 @@ router.get('/negacion', (req, res) => {
 });
 router.post('/contact/add', controllerContacts.add.bind(controllerContacts));
 router.get('/admin/contactlist', controllerContacts.list.bind(controllerContacts));
+router.post('/register', UserController_1.UserController.register);
+router.post('/login', UserController_1.UserController.login);
 router.get('/index', (req, res) => {
     res.render('index', { title: 'inicio' });
 });

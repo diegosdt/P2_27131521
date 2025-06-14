@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { ContactsController } from '../controllers/ContactsController';
 import { PaymentsController } from '../controllers/PaymentControler';
+import { UserController } from '../controllers/UserController'; // Cambia UserController por AuthController
 
 const router = express.Router();
 const controllerContacts = new ContactsController();
@@ -37,6 +38,19 @@ router.get('/exito', (req:Request, res:Response) => {
   res.render('exito');
 });
 
+router.get('/registrado', (req, res) => {
+  res.render('registrado', { error: null });
+});
+
+
+router.get('/login', (req, res) => {
+  res.render('login', { error: null });
+});
+
+router.get('/register', (req, res) => {
+  res.render('register', { error: null });
+});
+
 router.post('/payment/add', controllerPayment.processPayment.bind(controllerPayment));
 
 router.get('/admin/paymentlist', controllerPayment.listPayments.bind(controllerPayment));
@@ -53,8 +67,13 @@ router.post('/contact/add', controllerContacts.add.bind(controllerContacts));
 
 router.get('/admin/contactlist', controllerContacts.list.bind(controllerContacts));
 
+router.post('/register', UserController.register);
+router.post('/login', UserController.login);
+
+
 router.get('/index', (req:Request, res:Response) => {
   res.render('index', { title: 'inicio' });
+
 });
 
 export default router;

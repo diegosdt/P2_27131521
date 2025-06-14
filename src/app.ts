@@ -3,6 +3,9 @@ import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import session from 'express-session';
+
+
 
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
@@ -10,6 +13,16 @@ import usersRouter from './routes/users';
 const app = express();
 const port = 3000; 
 
+app.use(session({
+    secret: 'your-secret-key', // Cambia esto por una clave secreta segura
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: false, // Cambia a true si usas HTTPS
+        maxAge: 15 * 60 * 1000 // Expiración de la sesión: 15 minutos
+    }
+}));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
