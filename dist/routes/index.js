@@ -50,6 +50,9 @@ router.get('/contact', (req, res) => {
         succes: req.query.succes
     });
 });
+router.get('/paymentlist', (req, res) => {
+    res.render('paymentlist');
+});
 router.get('/payment', (req, res) => {
     res.render('payment');
 });

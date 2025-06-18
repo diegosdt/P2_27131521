@@ -57,6 +57,10 @@ router.get('/contact', (req: Request, res: Response) => {
   });
 });
 
+router.get('/paymentlist', (req:Request, res:Response) => {
+  res.render('paymentlist');
+});
+
 router.get('/payment', (req:Request, res:Response) => {
   res.render('payment');
 });
