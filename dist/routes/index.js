@@ -7,11 +7,33 @@ const express_1 = __importDefault(require("express"));
 const ContactsController_1 = require("../controllers/ContactsController");
 const PaymentControler_1 = require("../controllers/PaymentControler");
 const UserController_1 = require("../controllers/UserController"); // Cambia UserController por AuthController
+const express_session_1 = __importDefault(require("express-session"));
+const passport_1 = __importDefault(require("passport"));
 const router = express_1.default.Router();
 const controllerContacts = new ContactsController_1.ContactsController();
 const controllerPayment = new PaymentControler_1.PaymentsController();
+// Configuración de sesión
+router.use((0, express_session_1.default)({
+    secret: process.env.SESSION_SECRET || 'tu_secreto_seguro',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: process.env.NODE_ENV === 'production' }
+}));
+// Inicializa Passport
+UserController_1.UserController.initializePassport();
+router.use(passport_1.default.initialize());
+router.use(passport_1.default.session());
+// Rutas de autenticación
+router.get('/auth/google', UserController_1.UserController.googleAuth);
+router.get('/auth/google/callback', UserController_1.UserController.googleAuthCallback);
 router.get('/', (req, res) => {
-    res.render('index', { nombre: 'Diego', apellido: 'Duarte', cedula: '27131521', seccion: '4', title: 'Hola mundooo' });
+    res.render('index', { title: 'NutriBite - Talleres de cocina saludable',
+        description: 'Aprende a preparar comidas nutritivas y deliciosas en nuestros talleres presenciales',
+        ogTitle: 'Talleres de cocina saludable | NutriBite',
+        ogDescription: 'Únete a nuestros talleres y transforma tu manera de comer',
+        ogImage: 'https://tusitio.com/images/og-talleres.jpg',
+        ogUrl: 'https://tusitio.com',
+        originalUrl: req.originalUrl });
 });
 router.get('/menu', (req, res) => {
     res.render('menu', { title: 'Menú' });

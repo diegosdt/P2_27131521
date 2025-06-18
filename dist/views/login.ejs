@@ -1,4 +1,3 @@
-<!-- filepath: /views/auth/login.ejs -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -71,13 +70,48 @@
             color: #007bff;
             text-decoration: none;
         }
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #4285F4;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+        .google-btn:hover {
+            background-color: #357ABD;
+        }
+        .google-icon {
+            margin-right: 10px;
+            height: 20px;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+        }
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+        .divider-text {
+            padding: 0 10px;
+            color: #777;
+        }
     </style>
 </head>
 <body>
     <div class="auth-container">
         <h1>Iniciar Sesión</h1>
         
-       
+        <% if (typeof error !== 'undefined') { %>
+            <div class="error"><%= error %></div>
+        <% } %>
 
         <form action="/login" method="POST">
             <div class="form-group">
@@ -90,6 +124,15 @@
             </div>
             <button type="submit">Iniciar Sesión</button>
         </form>
+
+        <div class="divider">
+            <span class="divider-text">O</span>
+        </div>
+
+        <a href="/auth/google" class="google-btn">
+            <img src="https://www.google.com/favicon.ico" alt="Google logo" class="google-icon">
+            Iniciar con Google
+        </a>
 
         <div class="register-link">
             ¿No tienes una cuenta? <a href="/register">Regístrate</a>

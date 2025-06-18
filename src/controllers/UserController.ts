@@ -3,6 +3,8 @@ import { UserModel } from '../models/UserModel';
 import { Request, Response } from 'express';
 import 'express-session';
 import path from 'path';
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 
 declare module 'express-session' {
     interface SessionData {
@@ -12,9 +14,72 @@ declare module 'express-session' {
 }
 
 export class UserController {
+    static initializePassport() {
+        passport.use(new GoogleStrategy({
+            clientID: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            callbackURL: process.env.GOOGLE_CALLBACK_URL!
+        }, async (accessToken, refreshToken, profile, done) => {
+            try {
+                // Buscar o crear usuario basado en el perfil de Google
+                const email = profile.emails?.[0]?.value;
+                if (!email) {
+                    return done(new Error('No se encontró email en el perfil de Google'));
+                }
+
+                let user = await UserModel.findUserByUsername(email);
+                
+                if (!user) {
+                    // Crear un hash de contraseña aleatorio para el usuario de Google
+                    const randomPassword = Math.random().toString(36).slice(-8);
+                    const passwordHash = await bcrypt.hash(randomPassword, 10);
+                    
+                    const userId = await UserModel.createUser(email, passwordHash);
+                    
+                    user = {
+                        id: userId,
+                        username: email,
+                        password_hash: passwordHash,
+                        created_at: new Date().toISOString()
+                    };
+                }
+                
+                return done(null, user);
+            } catch (error) {
+                return done(error as Error);
+            }
+        }));
+
+        passport.serializeUser((user: any, done) => {
+            done(null, user.id);
+        });
+
+        passport.deserializeUser(async (id: number, done) => {
+            try {
+                const user = await UserModel.findUserById(id);
+                done(null, user);
+            } catch (error) {
+                done(error);
+            }
+        });
+    }
+
+    static async googleAuth(req: Request, res: Response) {
+        passport.authenticate('google', { 
+            scope: ['profile', 'email'],
+            prompt: 'select_account' // Opcional: fuerza la selección de cuenta
+        })(req, res);
+    }
+
+    static async googleAuthCallback(req: Request, res: Response) {
+        passport.authenticate('google', {
+            failureRedirect: '/login',
+            successRedirect: '/admin/contactlist'
+        })(req, res);
+    }
+
     static async register(req: Request, res: Response): Promise<void> {
         const { username, password } = req.body;
-        
         
         if (!username || !password) {
             return res.status(400).render('register', { 
@@ -25,7 +90,6 @@ export class UserController {
         try {
             console.log(`Intentando registrar usuario: ${username}`);
             
-            // Verificar si el usuario ya existe uwu
             const existingUser = await UserModel.findUserByUsername(username);
             if (existingUser) {
                 console.log(`Usuario ya existe: ${username}`);
@@ -42,7 +106,6 @@ export class UserController {
             
             console.log(`Usuario registrado exitosamente: ${username}`);
             
-           
             req.session.username = username; 
             return res.redirect('/registrado');
             
@@ -71,8 +134,6 @@ export class UserController {
             });
         }
     }
-
-    
 
     static async login(req: Request, res: Response): Promise<void> {
         const { username, password } = req.body;
@@ -110,7 +171,5 @@ export class UserController {
                 errorDetails: process.env.NODE_ENV === 'development' ? error instanceof Error ? error.stack : undefined : undefined
             });
         }
-    }
-
-    
+    }   
 }

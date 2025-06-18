@@ -19,7 +19,6 @@ export class UserModel {
                 driver: sqlite3.Database
             });
             
-            
             const tableCheck = await db.get(
                 "SELECT name FROM sqlite_master WHERE type='table' AND name='users'"
             );
@@ -68,6 +67,23 @@ export class UserModel {
             return user || null;
         } catch (error) {
             console.error('Error al buscar usuario:', error);
+            throw error;
+        } finally {
+            if (db) await db.close();
+        }
+    }
+
+    static async findUserById(id: number): Promise<User | null> {
+        let db;
+        try {
+            db = await this.getDb();
+            const user = await db.get<User>(
+                'SELECT * FROM users WHERE id = ?',
+                [id]
+            );
+            return user || null;
+        } catch (error) {
+            console.error('Error al buscar usuario por ID:', error);
             throw error;
         } finally {
             if (db) await db.close();

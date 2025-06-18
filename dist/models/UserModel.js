@@ -76,5 +76,23 @@ class UserModel {
             }
         });
     }
+    static findUserById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let db;
+            try {
+                db = yield this.getDb();
+                const user = yield db.get('SELECT * FROM users WHERE id = ?', [id]);
+                return user || null;
+            }
+            catch (error) {
+                console.error('Error al buscar usuario por ID:', error);
+                throw error;
+            }
+            finally {
+                if (db)
+                    yield db.close();
+            }
+        });
+    }
 }
 exports.UserModel = UserModel;

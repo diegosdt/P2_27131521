@@ -14,13 +14,13 @@ const app = express();
 const port = 3000; 
 
 app.use(session({
-    secret: 'your-secret-key', // Cambia esto por una clave secreta segura
+    secret: 'your-secret-key', 
     resave: false,
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        secure: false, // Cambia a true si usas HTTPS
-        maxAge: 15 * 60 * 1000 // Expiración de la sesión: 15 minutos
+        secure: false, 
+        maxAge: 15 * 60 * 1000 
     }
 }));
 

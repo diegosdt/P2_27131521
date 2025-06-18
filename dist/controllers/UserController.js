@@ -16,7 +16,70 @@ exports.UserController = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const UserModel_1 = require("../models/UserModel");
 require("express-session");
+const passport_1 = __importDefault(require("passport"));
+const passport_google_oauth20_1 = require("passport-google-oauth20");
 class UserController {
+    static initializePassport() {
+        passport_1.default.use(new passport_google_oauth20_1.Strategy({
+            clientID: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL: process.env.GOOGLE_CALLBACK_URL
+        }, (accessToken, refreshToken, profile, done) => __awaiter(this, void 0, void 0, function* () {
+            var _a, _b;
+            try {
+                // Buscar o crear usuario basado en el perfil de Google
+                const email = (_b = (_a = profile.emails) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.value;
+                if (!email) {
+                    return done(new Error('No se encontró email en el perfil de Google'));
+                }
+                let user = yield UserModel_1.UserModel.findUserByUsername(email);
+                if (!user) {
+                    // Crear un hash de contraseña aleatorio para el usuario de Google
+                    const randomPassword = Math.random().toString(36).slice(-8);
+                    const passwordHash = yield bcrypt_1.default.hash(randomPassword, 10);
+                    const userId = yield UserModel_1.UserModel.createUser(email, passwordHash);
+                    user = {
+                        id: userId,
+                        username: email,
+                        password_hash: passwordHash,
+                        created_at: new Date().toISOString()
+                    };
+                }
+                return done(null, user);
+            }
+            catch (error) {
+                return done(error);
+            }
+        })));
+        passport_1.default.serializeUser((user, done) => {
+            done(null, user.id);
+        });
+        passport_1.default.deserializeUser((id, done) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield UserModel_1.UserModel.findUserById(id);
+                done(null, user);
+            }
+            catch (error) {
+                done(error);
+            }
+        }));
+    }
+    static googleAuth(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            passport_1.default.authenticate('google', {
+                scope: ['profile', 'email'],
+                prompt: 'select_account' // Opcional: fuerza la selección de cuenta
+            })(req, res);
+        });
+    }
+    static googleAuthCallback(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            passport_1.default.authenticate('google', {
+                failureRedirect: '/login',
+                successRedirect: '/admin/contactlist'
+            })(req, res);
+        });
+    }
     static register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { username, password } = req.body;
@@ -27,7 +90,6 @@ class UserController {
             }
             try {
                 console.log(`Intentando registrar usuario: ${username}`);
-                // Verificar si el usuario ya existe uwu
                 const existingUser = yield UserModel_1.UserModel.findUserByUsername(username);
                 if (existingUser) {
                     console.log(`Usuario ya existe: ${username}`);
