@@ -38,6 +38,9 @@ router.get('/', (req, res) => {
 router.get('/menu', (req, res) => {
     res.render('menu', { title: 'Menú' });
 });
+router.get('/admin', (req, res) => {
+    res.render('admin', { title: 'admin' });
+});
 router.get('/informacion', (req, res) => {
     res.render('informacion', { title: 'informacion' });
 });

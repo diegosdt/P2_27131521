@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración | NutriBite</title>
+    <link rel="stylesheet" href="/stylesheets/admin.css">
+    
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <nav class="admin-bar">
+        <img src="/images/logo.png" alt="NutriBite Logo" class="logo">
+        <div class="admin-options">
+            <a href="/admin/contactlist" class="admin-option">
+                <i class="fas fa-users"></i> Lista de Contactos
+            </a>
+            <a href="/admin/paymentlist" class="admin-option">
+                <i class="fas fa-receipt"></i> Lista de Pagos
+            </a>
+            <a href="/logout" class="admin-option">
+                <i class="fas fa-sign-out-alt"></i> Salir
+            </a>
+        </div>
+    </nav>
+    
+    <main class="admin-main">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+        
+        <div class="welcome-container">
+            <h1 class="welcome-title">Bienvenido, Administrador</h1>
+            <h2 class="welcome-subtitle">Panel de Control de NutriBite</h2>
+            <p class="welcome-message">
+                Desde aquí podrás gestionar todos los aspectos importantes de la plataforma.
+                Revisa los contactos registrados, verifica los pagos realizados y mantén todo
+                organizado para ofrecer la mejor experiencia a nuestros usuarios.
+            </p>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value">128</div>
+                    <div class="stat-label">Contactos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">84</div>
+                    <div class="stat-label">Pagos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Talleres</div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <%- include('footer') %>
+    
+    <script>
+        // Actualizar estadísticas dinámicamente (puedes reemplazar con datos reales)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simular carga de datos
+            setTimeout(() => {
+                // Aquí iría la llamada AJAX para obtener datos reales
+                // Por ahora usamos valores de ejemplo
+                document.querySelectorAll('.stat-value')[0].textContent = '156';
+                document.querySelectorAll('.stat-value')[1].textContent = '112';
+                document.querySelectorAll('.stat-value')[2].textContent = '6';
+                
+                // Animación de actualización
+                const stats = document.querySelectorAll('.stat-card');
+                stats.forEach(stat => {
+                    stat.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        stat.style.transform = 'scale(1)';
+                    }, 300);
+                });
+            }, 1500);
+        });
+    </script>
+</body>
+</html>

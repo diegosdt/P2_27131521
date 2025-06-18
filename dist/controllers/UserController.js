@@ -68,7 +68,7 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             passport_1.default.authenticate('google', {
                 scope: ['profile', 'email'],
-                prompt: 'select_account' // Opcional: fuerza la selección de cuenta
+                prompt: 'select_account'
             })(req, res);
         });
     }
@@ -76,7 +76,7 @@ class UserController {
         return __awaiter(this, void 0, void 0, function* () {
             passport_1.default.authenticate('google', {
                 failureRedirect: '/login',
-                successRedirect: '/admin/contactlist'
+                successRedirect: '/admin'
             })(req, res);
         });
     }
@@ -146,7 +146,7 @@ class UserController {
                 }
                 req.session.userId = user.id;
                 req.session.username = user.username;
-                return res.redirect('/admin/contactlist');
+                return res.redirect('/admin');
             }
             catch (error) {
                 console.error('Error en UserController.login:', error);

@@ -67,14 +67,14 @@ export class UserController {
     static async googleAuth(req: Request, res: Response) {
         passport.authenticate('google', { 
             scope: ['profile', 'email'],
-            prompt: 'select_account' // Opcional: fuerza la selección de cuenta
+            prompt: 'select_account' 
         })(req, res);
     }
 
     static async googleAuthCallback(req: Request, res: Response) {
         passport.authenticate('google', {
             failureRedirect: '/login',
-            successRedirect: '/admin/contactlist'
+            successRedirect: '/admin'
         })(req, res);
     }
 
@@ -156,7 +156,7 @@ export class UserController {
 
             req.session.userId = user.id;
             req.session.username = user.username;
-            return res.redirect('/admin/contactlist');
+            return res.redirect('/admin');
             
         } catch (error: unknown) {
             console.error('Error en UserController.login:', error);

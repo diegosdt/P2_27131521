@@ -42,6 +42,10 @@ router.get('/menu', (req: Request, res: Response) => {
   res.render('menu', { title: 'Menú' });
 });
 
+router.get('/admin', (req: Request, res: Response) => {
+  res.render('admin', { title: 'admin' });
+});
+
 router.get('/informacion', (req: Request, res: Response) => {
   res.render('informacion', { title: 'informacion' });
 });
