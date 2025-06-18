@@ -6,32 +6,37 @@
         <title><%= title || 'NutriBite - Talleres de alimentación saludable' %></title>
         <link rel="stylesheet" href="/stylesheets/style.css">
 
-        <!-- Metadatos básicos -->
-        <meta name="description" content="<%= description || 'Talleres de alimentación saludable donde aprenderás a preparar comidas nutritivas y deliciosas' %>">
+        <!-- HTML Meta Tags -->
+<title>Talleres de cocina saludable | NutriBite</title>
+<meta name="description" content="Únete a nuestros talleres y transforma tu manera de comer">
 
-        <!-- Protocolo Open Graph (Facebook, LinkedIn, etc.) -->
-        <meta property="og:title" content="<%= ogTitle || title || 'NutriBite - Talleres de alimentación saludable' %>">
-        <meta property="og:description" content="<%= ogDescription || description || 'Aprende a preparar comidas nutritivas y deliciosas en nuestros talleres' %>">
-        <meta property="og:image" content="<%= ogImage || 'https://tusitio.com/images/og-default.jpg' %>">
-        <meta property="og:url" content="<%= ogUrl || 'https://tusitio.com' + originalUrl %>">
-        <meta property="og:type" content="website">
-        <meta property="og:site_name" content="NutriBite">
-        <meta property="og:locale" content="es_ES">
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content="https://p2-27131521.onrender.com">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Talleres de cocina saludable | NutriBite">
+<meta property="og:description" content="Únete a nuestros talleres y transforma tu manera de comer">
+<!--
+  You can generate this image URL dynamically: https://ogcdn.net/e210d584-354e-45b8-ade9-344b5176db46/v9/{title_text}/{date_text}/{logo_url}/{cta_text_text}/{cta_text_backgroundColor}/{shape_color_backgroundColor}/{backgroud_color_backgroundColor}/{image_url}/og.png
+  Replace the variables in the brackets with your own values and use this URL in the image tag below this comment. Ensure values are URL encoded.
+  For more information, read: https://www.opengraph.xyz/blog/how-to-implement-dynamic-open-graph-images
+-->
+<meta property="og:image" content="https://ogcdn.net/e210d584-354e-45b8-ade9-344b5176db46/v9/Talleres%20de%20cocina%20saludable%20%7C%20NutriBite/30%20March%202025/https%3A%2F%2Fopengraph.b-cdn.net%2Fproduction%2Fimages%2F977b98bd-b97a-4e4f-81f8-12bdbf95d326.jpg%3Ftoken%3D1x7GBkG9vMAvp49bf0lzefod2rwIkcr_fYZtaMtAg3U%26height%3D266%26width%3D474%26expires%3D33286260407/Read%20Article/rgba(194%2C%2024%2C%2091%2C%201)/rgba(194%2C%2024%2C%2091%2C%201)/linear-gradient(140deg%2C%20RGBA(170%2C225%2C225%2C1)%2052%25%2C%20rgba(172%2C31%2C86%2C1)%20100%25)/https%3A%2F%2Fopengraph.b-cdn.net%2Fproduction%2Fimages%2F977b98bd-b97a-4e4f-81f8-12bdbf95d326.jpg%3Ftoken%3D1x7GBkG9vMAvp49bf0lzefod2rwIkcr_fYZtaMtAg3U%26height%3D266%26width%3D474%26expires%3D33286260407/og.png">
 
-        <!-- Twitter Card -->
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="<%= ogTitle || title || 'NutriBite - Talleres de alimentación saludable' %>">
-        <meta name="twitter:description" content="<%= ogDescription || description || 'Aprende a preparar comidas nutritivas y deliciosas en nuestros talleres' %>">
-        <meta name="twitter:image" content="<%= ogImage || 'https://tusitio.com/images/og-default.jpg' %>">
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="p2-27131521.onrender.com">
+<meta property="twitter:url" content="https://p2-27131521.onrender.com">
+<meta name="twitter:title" content="Talleres de cocina saludable | NutriBite">
+<meta name="twitter:description" content="Únete a nuestros talleres y transforma tu manera de comer">
+<!--
+  You can generate this image URL dynamically: https://ogcdn.net/e210d584-354e-45b8-ade9-344b5176db46/v9/{title_text}/{date_text}/{logo_url}/{cta_text_text}/{cta_text_backgroundColor}/{shape_color_backgroundColor}/{backgroud_color_backgroundColor}/{image_url}/og.png
+  Replace the variables in the brackets with your own values and use this URL in the image tag below this comment. Ensure values are URL encoded.
+  For more information, read: https://www.opengraph.xyz/blog/how-to-implement-dynamic-open-graph-images
+-->
+<meta name="twitter:image" content="https://ogcdn.net/e210d584-354e-45b8-ade9-344b5176db46/v9/Talleres%20de%20cocina%20saludable%20%7C%20NutriBite/30%20March%202025/https%3A%2F%2Fopengraph.b-cdn.net%2Fproduction%2Fimages%2F977b98bd-b97a-4e4f-81f8-12bdbf95d326.jpg%3Ftoken%3D1x7GBkG9vMAvp49bf0lzefod2rwIkcr_fYZtaMtAg3U%26height%3D266%26width%3D474%26expires%3D33286260407/Read%20Article/rgba(194%2C%2024%2C%2091%2C%201)/rgba(194%2C%2024%2C%2091%2C%201)/linear-gradient(140deg%2C%20RGBA(170%2C225%2C225%2C1)%2052%25%2C%20rgba(172%2C31%2C86%2C1)%20100%25)/https%3A%2F%2Fopengraph.b-cdn.net%2Fproduction%2Fimages%2F977b98bd-b97a-4e4f-81f8-12bdbf95d326.jpg%3Ftoken%3D1x7GBkG9vMAvp49bf0lzefod2rwIkcr_fYZtaMtAg3U%26height%3D266%26width%3D474%26expires%3D33286260407/og.png">
 
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-54JHESYH02"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-54JHESYH02');
-        </script>
+<!-- Meta Tags Generated via https://www.opengraph.xyz -->
+
     </head>
 
 <body>
