@@ -4,18 +4,38 @@
     <meta charset="UTF-8">
     <title>Lista de Contactos</title>
     <link rel="stylesheet" href="/stylesheets/contacts_list.css">
+    <style>
+        .search-container {
+            margin: 20px 0;
+        }
+        #searchInput {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .no-results {
+            display: none;
+            padding: 10px;
+            background-color: #ffebee;
+            color: #c62828;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="barra">
-       
         <a href="/admin/paymentlist" class="opcion">pago</a>
-        
-        
-        
     </div>
 
-
     <h1>Contactos Recibidos</h1>
+    
+    
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Buscar por nombre o email..." autocomplete="off">
+        <div id="noResults" class="no-results">No se encontraron resultados</div>
+    </div>
+
     <table border="1">
         <thead>
             <tr>
@@ -27,11 +47,11 @@
                 <th>pais</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="contactsTable">
             <% contacts.forEach(contact => { %>
-                <tr>
-                    <td data-label="Nombre"><%= contact.name %></td>
-                    <td data-label="Email"><%= contact.email %></td>
+                <tr class="contact-row">
+                    <td data-label="Nombre" class="searchable-name"><%= contact.name %></td>
+                    <td data-label="Email" class="searchable-email"><%= contact.email %></td>
                     <td data-label="Comentario"><%= contact.comment %></td>
                     <td data-label="IP"><%= contact.ip_address %></td>
                     <td data-label="Fecha"><%= new Date(contact.created_at).toLocaleString() %></td>
@@ -41,5 +61,37 @@
         </tbody>
     </table>
     <%- include('footer') %>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const contactRows = document.querySelectorAll('.contact-row');
+            const noResultsMessage = document.getElementById('noResults');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                let hasResults = false;
+                
+                contactRows.forEach(row => {
+                    const name = row.querySelector('.searchable-name').textContent.toLowerCase();
+                    const email = row.querySelector('.searchable-email').textContent.toLowerCase();
+                    
+                    if (name.includes(searchTerm) || email.includes(searchTerm)) {
+                        row.style.display = '';
+                        hasResults = true;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+               
+                if (!hasResults && searchTerm.length > 0) {
+                    noResultsMessage.style.display = 'block';
+                } else {
+                    noResultsMessage.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
