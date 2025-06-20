@@ -4,17 +4,54 @@
     <meta charset="UTF-8">
     <title>Listado de Pagos</title>
     <link href="/stylesheets/payment_list.css" rel="stylesheet">
+    <style>
+        /* Estilos para el buscador */
+        .search-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        #searchPayment {
+            padding: 10px 15px;
+            width: 60%;
+            max-width: 500px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        #searchPayment:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+        }
+        .no-results {
+            display: none;
+            padding: 15px;
+            background-color: #fff3f3;
+            color: #d32f2f;
+            margin: 20px auto;
+            text-align: center;
+            border-radius: 5px;
+            width: 80%;
+            border: 1px solid #ffcdd2;
+        }
+    </style>
 </head>
 <body>
 
     <div class="barra">
-        
         <a href="/admin/contactlist" class="opcion">registrados</a>
-        
     </div>
 
     <main class="container">
         <h1 class="list-title">Pagos Recibidos</h1>
+        
+        <!-- Campo de búsqueda añadido -->
+        <div class="search-container">
+            <input type="text" id="searchPayment" placeholder="Buscar por titular o email..." autocomplete="off">
+            <div id="noPaymentResults" class="no-results">No se encontraron pagos que coincidan con la búsqueda</div>
+        </div>
         
         <table class="payment-table" border="1">
             <thead>
@@ -26,12 +63,12 @@
                     <th>Fecha</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="paymentsTable">
                 <% payments.forEach(payment => { %>
-                    <tr>
+                    <tr class="payment-row">
                         <td><%= payment.service %></td>
-                        <td><%= payment.email %></td>
-                        <td><%= payment.cardName %></td>
+                        <td class="searchable-email"><%= payment.email %></td>
+                        <td class="searchable-name"><%= payment.cardName %></td>
                         <td><%= payment.currency %> <%= payment.amount.toFixed(2) %></td>
                         <td><%= payment.formattedDate %></td>
                     </tr>
@@ -40,5 +77,33 @@
         </table>
     </main>
     <%- include('footer') %>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchPayment');
+            const paymentRows = document.querySelectorAll('.payment-row');
+            const noResultsMessage = document.getElementById('noPaymentResults');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                let hasResults = false;
+                
+                paymentRows.forEach(row => {
+                    const name = row.querySelector('.searchable-name').textContent.toLowerCase();
+                    const email = row.querySelector('.searchable-email').textContent.toLowerCase();
+                    
+                    if (name.includes(searchTerm) || email.includes(searchTerm)) {
+                        row.style.display = '';
+                        hasResults = true;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                // Mostrar mensaje si no hay resultados y hay texto en el buscador
+                noResultsMessage.style.display = (!hasResults && searchTerm.length > 0) ? 'block' : 'none';
+            });
+        });
+    </script>
 </body>
 </html>
