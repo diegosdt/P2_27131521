@@ -19,7 +19,7 @@
             <a href="/admin/paymentlist" class="admin-option">
                 <i class="fas fa-receipt"></i> Lista de Pagos
             </a>
-            <a href="/logout" class="admin-option">
+            <a href="/index" class="admin-option">
                 <i class="fas fa-sign-out-alt"></i> Salir
             </a>
         </div>
@@ -61,17 +61,16 @@
     <%- include('footer') %>
     
     <script>
-        // Actualizar estadísticas dinámicamente (puedes reemplazar con datos reales)
+        
         document.addEventListener('DOMContentLoaded', function() {
-            // Simular carga de datos
+            
             setTimeout(() => {
-                // Aquí iría la llamada AJAX para obtener datos reales
-                // Por ahora usamos valores de ejemplo
+            
                 document.querySelectorAll('.stat-value')[0].textContent = '156';
                 document.querySelectorAll('.stat-value')[1].textContent = '112';
                 document.querySelectorAll('.stat-value')[2].textContent = '6';
                 
-                // Animación de actualización
+                
                 const stats = document.querySelectorAll('.stat-card');
                 stats.forEach(stat => {
                     stat.style.transform = 'scale(1.1)';

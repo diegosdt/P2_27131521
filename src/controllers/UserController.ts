@@ -21,7 +21,7 @@ export class UserController {
             callbackURL: process.env.GOOGLE_CALLBACK_URL!
         }, async (accessToken, refreshToken, profile, done) => {
             try {
-                // Buscar o crear usuario basado en el perfil de Google
+                
                 const email = profile.emails?.[0]?.value;
                 if (!email) {
                     return done(new Error('No se encontró email en el perfil de Google'));
@@ -30,7 +30,7 @@ export class UserController {
                 let user = await UserModel.findUserByUsername(email);
                 
                 if (!user) {
-                    // Crear un hash de contraseña aleatorio para el usuario de Google
+                    
                     const randomPassword = Math.random().toString(36).slice(-8);
                     const passwordHash = await bcrypt.hash(randomPassword, 10);
                     

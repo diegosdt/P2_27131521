@@ -27,14 +27,12 @@ class UserController {
         }, (accessToken, refreshToken, profile, done) => __awaiter(this, void 0, void 0, function* () {
             var _a, _b;
             try {
-                // Buscar o crear usuario basado en el perfil de Google
                 const email = (_b = (_a = profile.emails) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.value;
                 if (!email) {
                     return done(new Error('No se encontró email en el perfil de Google'));
                 }
                 let user = yield UserModel_1.UserModel.findUserByUsername(email);
                 if (!user) {
-                    // Crear un hash de contraseña aleatorio para el usuario de Google
                     const randomPassword = Math.random().toString(36).slice(-8);
                     const passwordHash = yield bcrypt_1.default.hash(randomPassword, 10);
                     const userId = yield UserModel_1.UserModel.createUser(email, passwordHash);

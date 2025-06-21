@@ -1,6 +1,7 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import path from 'path';
+import bcrypt from 'bcryptjs';
 
 const dbPath = path.join(__dirname, '../../contacts.db');
 
@@ -52,7 +53,30 @@ export async function createTables() {
     `);
 
    
+    try {
+        const adminExists = await db.get(
+            'SELECT 1 FROM users WHERE username = ?', 
+            ['admin']
+        );
+        
+        if (!adminExists) {
+            const saltRounds = 10;
+            const passwordHash = await bcrypt.hash('admin123', saltRounds);
+            
+            await db.run(
+                'INSERT INTO users (username, password_hash) VALUES (?, ?)',
+                ['admin', passwordHash]
+            );
+            console.log('Usuario admin creado exitosamente');
+        } else {
+            console.log('El usuario admin ya existe');
+        }
+    } catch (error) {
+        console.error('Error al crear usuario admin:', error);
+    }
     
+
+
     await db.close();
 }
 

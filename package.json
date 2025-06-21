@@ -32,6 +32,7 @@
   "devDependencies": {
     "@types/axios": "^0.14.4",
     "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.8",
     "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.2",
@@ -43,6 +44,7 @@
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/sqlite3": "^5.1.0",
+    "bcryptjs": "^3.0.2",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
